@@ -1,36 +1,38 @@
-How This Works
-Upload a ZIP containing your PNG frames.
-The script unzips them into a temporary folder.
-It renames them in a simple sequence (frame_0001.png, frame_0002.png, etc.) so FFmpeg can read them via frame_%04d.png.
-Choose Frame Rate (30 or 60).
-Choose Scaling (no scaling, 512×512, or 100×100).
-Set Bitrate (e.g. 200k).
-Click “Encode to WebM.”
-The app runs a two-pass encode.
-Returns either the path to the .webm file or a warning/error message.
-Check “Status / Info.”
-If the file is under 256 KB, you’ll see a path to the final .webm.
-If over 256 KB, it warns you but still gives a path.
-Click “Download WebM.”
-Gradio will provide a download link if a valid file was produced.
-Note: For local usage, Gradio spawns a local server at http://127.0.0.1:7860 (by default). You can open that in your browser to use the UI. If you want to share publicly, you can enable the share=True flag in demo.launch() or deploy on a platform like Hugging Face Spaces.
+# WebM Encoder
 
-Usage Tips
-Large Sequences
+This script allows you to easily create WebM videos from PNG frame sequences.
 
-If you have many frames or large frames, uploading a big ZIP might be slow.
-If this is local, it’s fine—just keep an eye on disk usage.
-Two-Pass for Consistency
+## How It Works
 
-This approach is still your best bet for hitting a stable, predictable file size.
-If it’s still too big, lower the bitrate or reduce resolution/fps.
-No Audio
+1. Upload a ZIP containing your PNG frames.
+2. The script unzips them into a temporary folder and renames them sequentially.
+3. Choose Frame Rate (30 or 60 fps).
+4. Select Scaling options (no scaling, 512×512, or 100×100).
+5. Set Bitrate (e.g., 200k).
+6. Click "Encode to WebM" to run a two-pass encode.
+7. The app returns the path to the .webm file or a warning/error message.
+8. Check "Status / Info" for the file path or warnings.
+9. Click "Download WebM" to get the final file.
 
-We’re using -an, so no audio track is included.
-Alpha
+## Usage Tips
 
-We keep -pix_fmt yuva420p and -auto-alt-ref 0 for VP9 alpha.
-File Size Check
+### Large Sequences
+For many or large frames, be mindful of disk usage when uploading big ZIP files.
 
-After encoding, we check if the .webm is bigger than 256 KB.
-You’ll see a warning if it is.
+### Two-Pass Encoding
+This method ensures stable and predictable file sizes. Adjust bitrate or reduce resolution/fps if the file is too large.
+
+### No Audio
+The script uses `-an`, so no audio track is included.
+
+### Alpha Channel
+We maintain `-pix_fmt yuva420p` and `-auto-alt-ref 0` for VP9 alpha support.
+
+### File Size Check
+The script warns you if the output .webm is larger than 256 KB.
+
+## Local Usage
+Gradio spawns a local server at http://127.0.0.1:7860 by default. Open this in your browser to use the UI.
+
+## Public Sharing
+Enable `share=True` in `demo.launch()` or deploy on platforms like Hugging Face Spaces for public access.
